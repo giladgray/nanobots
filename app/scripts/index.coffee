@@ -14,17 +14,26 @@ pocket = require('./engine.coffee')({
       A: 'LEFT'
       S: 'DOWN'
       D: 'RIGHT'
+      32: 'SPAWN' # space
 })
 
 # basic components for game entities
 pocket.component 'position', Vector.new()
 pocket.component 'velocity', Vector.new()
 pocket.component 'rotation', {angle: 0}
+pocket.component 'health',   {health: 100}
 
-require('./bullets.coffee') pocket
+bullets = require('./bullets.coffee') pocket
 
 # create the nanobot! (returns its key)
 nanobot = require('./nanobot.coffee') pocket
+
+enemies = require('./enemies.coffee') pocket, nanobot
+
+keyboard = pocket.getData 'keyboard'
+pocket.system 'spawn-enemy', [], (pocket) ->
+  if keyboard.isNewPress 'SPAWN'
+    enemies.newEnemy()
 
 # get things moving
 pocket.systemForEach 'move-keys', ['position', 'velocity'], (pocket, key, pos, vel) ->
