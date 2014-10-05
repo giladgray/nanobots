@@ -16,14 +16,15 @@ module.exports = (pocket) ->
     lastFired: 0
     fireRate: 100
     bullet:
+      damage: 10
       speed: 10
       time: 2000
-      size: 10
+      size: 5
   }
 
   # make the nanobot itself!
   key = pocket.key
-    'human-controlled-01': true
+    'human-powered': true
     nanobot  : null
     position : Vector.new(canvas.width / 2, canvas.height / 2)
     velocity : null
@@ -31,7 +32,7 @@ module.exports = (pocket) ->
     rifle    : null
 
   # update velocity based on keyboard state
-  pocket.systemForEach 'move-nanobot', ['nanobot', 'velocity', 'human-controlled-01'],
+  pocket.systemForEach 'move-nanobot', ['nanobot', 'velocity', 'human-powered'],
     (pocket, key, nanobot, velocity) ->
       if keyboard.down.UP
         velocity.y = -nanobot.speed
@@ -47,20 +48,21 @@ module.exports = (pocket) ->
         velocity.x = 0
 
   # update rotation to point at the mouse cursor
-  pocket.systemForEach 'rotate-nanobot', ['nanobot', 'position', 'rotation', 'human-controlled-01'],
+  pocket.systemForEach 'rotate-nanobot', ['nanobot', 'position', 'rotation', 'human-powered'],
     (pocket, key, nanobot, position, rotation) ->
       mouseVector = Vector.sub mouse.cursor, position, true
       rotation.angle = Vector.angle mouseVector
 
   # left button fires the rifle and creates bullets!
-  pocket.systemForEach 'fire-rifle', ['nanobot', 'position', 'rotation', 'rifle'],
+  pocket.systemForEach 'fire-rifle', ['nanobot', 'position', 'rotation', 'rifle', 'human-powered'],
     (pocket, key, nanobot, position, rotation, rifle) ->
       return unless mouse.buttons.left and pocket.time - rifle.lastFired >= rifle.fireRate
       rifle.lastFired = pocket.time
       # a new bullet:
       pocket.key {
+        'nanobot-fired': true
         position : Vector.clone position
-        bullet   : {size: rifle.bullet.size}
+        bullet   : {size: rifle.bullet.size, damage: rifle.bullet.damage}
         velocity : Vector.fromPolar rifle.bullet.speed, rotation.angle
         lifetime : {time: rifle.bullet.time}
       }
