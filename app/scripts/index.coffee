@@ -21,6 +21,8 @@ pocket.component 'position', Vector.new()
 pocket.component 'velocity', Vector.new()
 pocket.component 'rotation', {angle: 0}
 
+require('./bullets.coffee') pocket
+
 # create the nanobot! (returns its key)
 nanobot = require('./nanobot.coffee') pocket
 
