@@ -58,11 +58,6 @@ pocket.systemForEach 'rotate-nanobot', ['nanobot', 'position', 'rotation', 'huma
 pocket.systemForEach 'move-keys', ['position', 'velocity'], (pocket, key, pos, vel) ->
   Vector.add pos, vel
 
-# clear the canvas each frame
-pocket.system 'clear-canvas', [], (pocket) ->
-  {g2d, width, height} = canvas
-  g2d.clearRect 0, 0, width, height
-
 pocket.systemForEach 'draw-nanobot', ['nanobot', 'position', 'rotation'],
   (pocket, key, nanobot, position, rotation) ->
     size = nanobot.size

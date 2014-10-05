@@ -14,6 +14,11 @@ module.exports = (options={}) ->
   pocket.key {mouse    : options.mouse}
   pocket.key {keyboard : options.keyboard}
 
+  canvas = pocket.getData 'canvas'
+
+  # clear the canvas each frame
+  pocket.system 'clear-canvas', [], (pocket) ->
+    canvas.g2d.clearRect 0, 0, canvas.width, canvas.height
 
   # render loop
   pocket.start = (time) ->
