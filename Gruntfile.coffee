@@ -82,6 +82,7 @@ module.exports = (grunt, options) ->
       dist:
         files: [
           {expand: true, cwd: 'app', src: ['styles/fonts/**'], dest: 'dist'},
+          {src: 'app/index.html', dest: 'dist/index.html'}
         ]
 
     # grunt-contrib-imagemin
@@ -157,14 +158,13 @@ module.exports = (grunt, options) ->
     'useminPrepare'
     'concat'
     'uglify'
-    'cssmin'
+    # 'cssmin'
     'usemin'
   ]
 
   # build, minify, copy production assets
   grunt.registerTask 'dist', [
     'build:dist',
-    'copy',
     'minify',
     'connect:dist:keepalive'
   ]
